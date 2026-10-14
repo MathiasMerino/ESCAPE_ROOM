@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [Header("Configuración")]
     public float interactionDistance = 3f;
-    public Camera playerCamera;
     public KeyCode interactionKey = KeyCode.E;
 
     void Update()
@@ -17,25 +15,22 @@ public class PlayerInteraction : MonoBehaviour
 
     void Interact()
     {
-        if (playerCamera == null)
-        {
-            Debug.LogWarning("Asigna la cámara del jugador.");
-            return;
-        }
-
         Ray ray = new Ray(
-            playerCamera.transform.position,
-            playerCamera.transform.forward
+            transform.position + Vector3.up * 0.5f,
+            transform.forward
         );
 
-        if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
-        {
-            Debug.Log("Objeto detectado: " + hit.collider.name);
+        RaycastHit hit;
 
-            hit.collider.SendMessage(
-                "OnInteract",
-                SendMessageOptions.DontRequireReceiver
-            );
+        if (Physics.Raycast(ray, out hit, interactionDistance))
+        {
+            InteractableObject obj =
+                hit.collider.GetComponent<InteractableObject>();
+
+            if (obj != null)
+            {
+                obj.Interact();
+            }
         }
     }
 }
