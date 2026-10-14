@@ -24,12 +24,22 @@ public class PlayerInteraction : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
+            // Interacción para recoger objetos
             InteractableObject obj =
                 hit.collider.GetComponent<InteractableObject>();
 
             if (obj != null)
             {
                 obj.Interact();
+            }
+
+            // Interacción para mostrar pistas
+            ObjetoPista pista =
+                hit.collider.GetComponent<ObjetoPista>();
+
+            if (pista != null)
+            {
+                pista.MostrarPista();
             }
         }
     }
